@@ -5,7 +5,7 @@
 		<li><a href="/bg3">Chapter III</a></li>
 		<li><a href="/bg4">Chapter IV</a></li>
 		<li><a href="/xp">Chapter V</a></li>
-		<li><p>Chapter VI</p></li>
+		<li><a href="/article">Chapter VI</a></li>
 		<li><p>Chapter VII</p></li>
 		<li><p>Chapter VIII</p></li>
 		<li><p>Chapter IX</p></li>

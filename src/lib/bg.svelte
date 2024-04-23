@@ -1,27 +1,29 @@
-<div class="bg bg-grad-01"></div>
+<div class="bg-wrapper">
+	<div class="bg bg-grad-01"></div>
+	<div class="bg bg-grad-02"></div>
+	<div class="bg bg-grad-03"></div>
+	<div class="bg bg-grad-04"></div>
 
-<div class="bg bg-grad-02"></div>
-<div class="bg bg-grad-03"></div>
-<div class="bg bg-grad-04"></div>
+	<div class="bg bg-overlay"></div>
 
-<div class="bg bg-overlay"></div>
-
-<div class="bg bg-image"></div>
-
-<!-- <div class="bg-grad-test"></div> -->
+	<div class="bg bg-image"></div>
+</div>
 
 <style>
+	.bg-wrapper {
+		position: relative;
+	}
 	.bg-overlay {
-		background-image: url('royko-branding-transparent-reverse-wide.png');
+		background-image: url('/royko-branding-transparent-reverse-wide.png');
 		z-index: 4;
 	}
 	.bg-image {
-		background-image: url('royko-thinking.webp');
-		background-image: url('wave-color.png');
-		background-image: url('chicago-skyline-3.png');
+		background-image: url('/royko-thinking.webp');
+		background-image: url('/wave-color.png');
+		background-image: url('/chicago-skyline-3.png');
 		/* background-image: url('chicagosuntimes-notext-2.png'); */
 		/* background-image: url('city-black.png'); */
-		background-image: url('city-white.png');
+		background-image: url('/city-white.png');
 		z-index: 3;
 	}
 	.bg {
