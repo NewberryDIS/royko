@@ -1,6 +1,10 @@
 <script>
 
-	import Bg from '$lib/bg.svelte';
+	// import Bg from '$lib/bg.svelte';
+	import Bg from '$lib/bg3-2.svelte';
+	import Bg2 from '$lib/bg2.svelte';
+	import Bg3 from '$lib/bg3.svelte';
+	import Bg4 from '$lib/bg4.svelte';
 import { page } from '$app/stores';
 import { pushState } from '$app/navigation';
 import { createFlip } from '$lib/flip'
@@ -8,9 +12,9 @@ import { createFlip } from '$lib/flip'
 let { id } = $page.params || 'nonce'
 $: ( { id } = $page.params )
 // const content = [1,2,3,4,5,6,7,8]
-const content = ['a','b','c','d','e','f','g']
+const content = ['intro','b','c','d','e','f','g']
 
-let layouts = ['"a nonce" "b nonce" "c nonce" "d nonce" "e nonce" "f nonce" "g nonce"',...content.map(n => {
+let layouts = [...content.map(n => {
   let layoutArray = []
   for (let l in content){
     if (n !== content[l]){
@@ -19,16 +23,19 @@ let layouts = ['"a nonce" "b nonce" "c nonce" "d nonce" "e nonce" "f nonce" "g n
   }
   console.log(layoutArray.join(' '))
   return layoutArray.join(' ')
-})]
-let layout = content.includes(id) ? layouts[content.indexOf(id)] : layouts[0]
-$: layout = content.includes(id) ? layouts[content.indexOf(id)] : layouts[0]
+}), '"intro nonce" "b nonce" "c nonce" "d nonce" "e nonce" "f nonce" "g nonce"']
+
+let layout = content.includes(id) ? layouts[content.indexOf(id)] : layouts[content.length]
+$: layout = content.includes(id) ? layouts[content.indexOf(id)] : layouts[content.length]
 
 let hideContent = true
 let ready = true 
+  let background = 1
 
 async function handleClick(i, n) {
   console.log(i, n)
   if (ready && n !== $page.state.showArticle) {
+    background = i
     ready = false
     layout = layouts[i]
     const flipInstance = createFlip('.box', { duration: 1000 });
@@ -36,29 +43,49 @@ async function handleClick(i, n) {
     pushState(`/article/${content[i]}`, {
       showArticle: content[i]
     });
-    hideContent = false
 
-  }
+  } else {
+    ready = false
+    layout = layouts[content.length]
+    const flipInstance = createFlip('.box', { duration: 1000 });
+    ready = await flipInstance.flip();
+    pushState(`/article/`, {
+      showArticle: 'nonce'
+    });
+    }
+
 }
 
 const borderColors = ' border: 3px solid oklch(77% 0.2 {Math.round(300 / content.length) * i});'
 const colors = [ 20, 200, 230, 320 ]
 //      on:click={( $page.state.showArticle || id ) === n ? () => handleClick(i, n) : ''} 
 //      on:click={() => handleClick(i, n)} 
-$: console.log($page.state.showArticle)
+$: console.log("background", background)
 
 </script>
+{#if background === 1 }
+  <Bg />
+{:else if background === 2}
+  <Bg2 />
+{:else if background === 3}
+  <Bg3 color="light" />
+{:else if background === 4}
+  <Bg3 color="dark" />
+{:else if background === 5}
+  <Bg4 />
+{:else}
 <Bg />
+{/if}
 <div class="grid" style="grid-template-areas: {layout}; --content-length: {content.length}">
   {#each content as n, i}
     <article 
-      on:click={() => handleClick(i, n) }
+      on:click={ready ? () => handleClick(i, n) : '' }
       class="box article-{i}"
       class:active={( $page.state.showArticle || id ) === n && ready}
       style="cursor: { ready? 'pointer': '' }; grid-area: {n}; "
     >
       <div class="child">
-        <h2>article {content[i]}</h2>
+        <h2>{ content[i].length === 1 ? "article"  : ''} {content[i]}</h2>
       </div>
     </article>
   {/each}
@@ -116,10 +143,12 @@ article.active {
 }
 article:not(.active) {
   & .child {
-  box-shadow: 0 8px 32px 0 rgba( 31, 38, 135, 0.37 );
+    overflow: hidden;
+  /* box-shadow: 0 8px 32px 0 rgba( 31, 38, 135, 0.37 ); */
   backdrop-filter: blur( 6px );
-  border-radius: 10px;
+  /* border-radius: 10px; */
   border: 1px solid rgba( 255, 255, 255, 0.18 );
+  border: 1px solid rgba( 0,0,0, 0.77 );
   }
 }
 article {
@@ -134,15 +163,17 @@ article {
   padding: 3%;
   width: min(100%, 50vw);
   height: min(100%, 77vh);
+  max-height: min(100%, 77vh);
   background: rgba( 255, 255, 255, 0.6 );
-  box-shadow: 0 8px 32px 0 rgba( 31, 38, 135, 0.37 );
+  /* box-shadow: 0 8px 32px 0 rgba( 31, 38, 135, 0.37 ); */
   backdrop-filter: blur( 6px );
-  border-radius: 10px;
-  border: 1px solid rgba( 255, 255, 255, 0.18 );
+  border-radius: 6px;
+  border: 1px solid rgba( 255, 255, 255, 0.77 );
 }
 .child h2 {
 
   font-family: 'Monaspace Argon Light';
+  font-family: sans-serif;
 
 
 }

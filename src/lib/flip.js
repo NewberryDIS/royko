@@ -67,7 +67,7 @@ class Flip {
 
   flip(options = {}) {
     const {
-      duration = 1000,
+      duration = 500,
       delay = 0,
       stagger = 0,
       easing = linear,

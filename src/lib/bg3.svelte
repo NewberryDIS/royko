@@ -1,3 +1,6 @@
+<script>
+export let color
+</script>
 <div class="bg bg-grad-01"></div>
 
 <div class="bg bg-grad-02"></div>
@@ -6,24 +9,11 @@
 
 <div class="bg bg-overlay"></div>
 
-<div class="bg bg-image"></div>
+<div class="bg bg-image {color}"></div>
 
 <!-- <div class="bg-grad-test"></div> -->
 
 <style>
-	.bg-overlay {
-		background-image: url('royko-branding-transparent-wide.png');
-		z-index: 4;
-	}
-	.bg-image {
-		background-image: url('royko-thinking.webp');
-		background-image: url('wave-color.png');
-		background-image: url('chicago-skyline-3.png');
-		/* background-image: url('chicagosuntimes-notext-2.png'); */
-		/* background-image: url('city-black.png'); */
-		background-image: url('city-white.png');
-		z-index: 3;
-	}
 	.bg {
 		/* background-color: #fff; */
 		background-size: cover;
@@ -34,7 +24,8 @@
 		top: 0;
 		right: 0;
 		bottom: 0;
-		left: 200px;
+		left: 0;
+
 	}
 	.bg-grad-01 {
 		opacity: 0.001;
@@ -71,6 +62,25 @@
 		background-image: radial-gradient(at top left, var(--colr), #0000);
 		animation: 8s bgmove infinite;
 	}
+	.bg-overlay {
+		background-image: url('/royko-branding-transparent-wide.png');
+		z-index: 6;
+	}
+	.bg-image {
+		/* background-image: url('/royko-thinking.webp'); */
+		/* background-image: url('/wave-color.png'); */
+		/* background-image: url('/chicago-skyline-3.png'); */
+		/* background-image: url('/chicagosuntimes-notext-2.png'); */
+		z-index: 5;
+	}
+  .bg-image.light {
+    opacity:  0.8;
+		background-image: url('/city-white.png');
+  }
+  .bg-image.dark {
+    opacity:  0.6;
+		background-image: url('/city-black.png');
+  }
 	@keyframes bgmove {
 		0% {
 			opacity: 0.001;

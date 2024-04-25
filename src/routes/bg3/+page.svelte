@@ -3,7 +3,7 @@
 	import Sidebar from '$lib/sidebar.svelte';
 </script>
 
-<Bg />
+<Bg color="dark"/>
 <main>
 	<Sidebar />
 	<section></section>
