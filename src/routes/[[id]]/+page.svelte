@@ -1,13 +1,14 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
-  import { base } from '$app/paths'
+	import { base } from '$app/paths';
 	import { page } from '$app/stores';
 	import { pushState } from '$app/navigation';
 	import { createFlip } from '$lib/flip';
 	import Bg from '$lib/bg.svelte';
 	import Tile from '$lib/tile.svelte';
+	// import Timer from '$lib/timer.svelte';
 	import { article, content, layouts, slugs } from '$lib';
-
+	// let timesUp = false;
 	// const locationNOK = true;
 	const locationNOK = false;
 	const pixPath = locationNOK ? 'blurry-pix' : 'transp-text';
@@ -17,12 +18,12 @@
 	let layout = $slugs.includes($article)
 		? $layouts[$slugs.indexOf($article)]
 		: $layouts[$layouts.length - 1];
-	// $: console.log('layouts ', layout);
+	// $: console.log('layout', layout);
 	// $: console.log(' article ', $article);
 	let hideContent = true,
 		ready = true;
 
-	async function handleClick(e: Event, n: String, i: Number) {
+	export async function handleClick(n: String, i: Number) {
 		// console.log(n, i);
 		if (ready && n !== $page.state.showArticle) {
 			ready = false;
@@ -42,14 +43,15 @@
 			});
 		}
 	}
+	// $: timesUp && handleClick($page.state.showArticle, $layouts.length);
 </script>
 
 <Bg {locationNOK} />
-
+<!-- <Timer bind:timesUp /> -->
 <div class="grid" style="grid-template-areas: {layout};">
 	{#each Object.entries($content) as [k, v], i}
 		<article
-			on:click={ready ? (e) => handleClick(e, k, i) : ''}
+			on:click={ready ? () => handleClick(k, i) : ''}
 			class="box article-{i}"
 			class:active={($page.state.showArticle || $article) === k && ready}
 			style="cursor: {ready ? 'pointer' : ''}; grid-area: {k}; "
@@ -57,6 +59,11 @@
 			<div class="child">
 				<!-- {#if ready} -->
 				<div class="text-images">
+					{#if locationNOK}
+						<p class="locnok">
+							Due to licensing issues, the text can only <br />be viewed on site. Come visit!
+						</p>
+					{/if}
 					{#each v.pages as page}
 						<img
 							src="{base}/{pixPath}/991625758805867_ord_f_548.52_r684_1999_{page}.webp"
@@ -72,18 +79,16 @@
 </div>
 
 <style>
-	.loc-nok {
-		position: absolute;
-		top: 40%;
-		left: 0;
-		right: 0;
+	.locnok {
+		position: sticky;
+		top: 0;
 		font-size: 3vh;
-		line-height: 3vh;
+
 		text-align: center;
 		background: rgba(255, 255, 255, 0.87);
 		padding: 11px 33px;
 		z-index: 10001;
-		/* border: 1px solid rgba(0,0,0,0.5); */
+		border: 1px solid rgba(0, 0, 0, 0.5);
 		/* animation: 30s text-color-shift infinite; */
 	}
 
