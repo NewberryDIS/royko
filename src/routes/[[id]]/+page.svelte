@@ -6,10 +6,8 @@
 	import { createFlip } from '$lib/flip';
 	import Bg from '$lib/bg.svelte';
 	import Tile from '$lib/tile.svelte';
-	// import Timer from '$lib/timer.svelte';
 	import { article, content, layouts, slugs } from '$lib';
-	// let timesUp = false;
-	// const locationNOK = true;
+
 	const locationNOK = false;
 	const pixPath = locationNOK ? 'blurry-pix' : 'transp-text';
 	$article = $page.params.id || '';
@@ -47,7 +45,6 @@
 </script>
 
 <Bg {locationNOK} />
-<!-- <Timer bind:timesUp /> -->
 <div class="grid" style="grid-template-areas: {layout};">
 	{#each Object.entries($content) as [k, v], i}
 		<article
@@ -102,6 +99,7 @@
 		--color-6: #7d119c;
 		--color-7: #0e1d24;
 		--color-8: #182635;
+    --color-9: #ad3533;
 	}
 	.box:not(.active) .text-images,
 	.box.active .title {

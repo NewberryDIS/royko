@@ -35,8 +35,8 @@
 
 			height: 100%;
 			width: 100%;
-			background-image: linear-gradient(45deg, var(--color-4), var(--color-8), var(--color-4)),
-				url('/royko/city-with-color-sm.png');
+			background-image: linear-gradient(45deg, var(--color-4), var(--color-8), var(--color-4)), url('/royko/city-with-color-sm.png');
+			/* background-image: linear-gradient(45deg, var(--color-9), var(--color-4), var(--color-8), var(--color-4), var(--color-9) ), url('/royko/city-with-color-sm.png'); */
 			position: relative;
 			background-size: 200vh 100%;
 			background-clip: text;

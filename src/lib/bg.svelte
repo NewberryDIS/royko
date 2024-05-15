@@ -1,6 +1,6 @@
 <script>
 	const colors = ['dark', 'dark-inv', 'light', 'light-inv'];
-	const grads = [5, 1, 2, 5, 0, 8, 0];
+	const grads = [ 5, 1, 2, 5, 0, 8, 0];
 	const directions = [
 		'',
 		'left center',
@@ -15,6 +15,7 @@
 </script>
 
 <!-- <h1 style="z-index: 100000; position: fixed; top: 0; left: 0;">{color}</h1> -->
+<div class="bg bg-toppiest"></div>
 <div class="bg bg-overlay"></div>
 <div class="bg bg-image"></div>
 {#each grads as i, idx}
@@ -28,6 +29,120 @@
 {/each}
 
 <style>
+	.test-bg {
+		opacity: 0.001;
+		background-size: cover;
+		background-position: center;
+		background-repeat: no-repeat;
+
+		animation-name: bgfade;
+		animation-duration: 20s;
+		animation-timing-function: ease;
+		animation-iteration-count: infinite;
+		animation-direction: normal;
+		animation-fill-mode: none;
+		animation-play-state: running;
+		position: fixed;
+		top: 0;
+		right: 0;
+		bottom: 0;
+		left: 0;
+	}
+
+	.bg {
+		background-size: cover;
+		background-position: center;
+		background-repeat: no-repeat;
+
+		position: absolute;
+		top: 0;
+		right: 0;
+		bottom: 0;
+		left: 0;
+	}
+	.bg-toppiest {
+		background-image: url('/royko/royko-branding-transparent-reverse-wide-red.png');
+		z-index: 12;
+		animation-name: bgmove;
+		animation-duration: 20s;
+		animation-timing-function: ease;
+		animation-iteration-count: infinite;
+		animation-direction: normal;
+		animation-fill-mode: none;
+		animation-play-state: running;
+	}
+	.bg-overlay {
+		background-image: url('/royko/royko-branding-transparent-reverse-wide.png');
+		z-index: 11;
+	}
+	.bg-image {
+		opacity: 0.7;
+		background-image: url('/royko/city-with-color.png');
+		z-index: 10;
+	}
+	.bg-image::before {
+		content: '';
+		position: absolute;
+		top: 0;
+		right: 0;
+		bottom: 0;
+		left: 0;
+		backdrop-filter: grayscale(1);
+		animation-name: bgmove;
+		animation-duration: 20s;
+		animation-timing-function: ease;
+		animation-iteration-count: infinite;
+		animation-direction: normal;
+		animation-fill-mode: none;
+		animation-play-state: running;
+	}
+	:global(body) {
+		--color-0-1: #222647;
+		--color-0-2: #7d119c;
+
+		--color-1-1: #3498ff;
+		--color-1-2: #c092ff;
+		--color-2-1: #56bfff;
+		--color-2-2: #96bcff;
+		--color-3-1: #76e1ff;
+		--color-3-2: #73e0ff;
+		--color-4-1: #357aab;
+		--color-4-2: #7b77b1;
+		--color-5-1: #1050ab;
+		--color-5-2: #be4ab1;
+		--color-6-1: #7d119c;
+		--color-6-2: #c81c64;
+		--color-7-1: #0e1d24;
+		--color-7-2: #181d38;
+		--color-8-1: #182635;
+		--color-8-2: #222647;
+    /* The Red */
+    --color-9-1: #ad3533;
+    --color-9-2: #ad3533;
+	}
+	@keyframes desat {
+		0% {
+			filter: grayscale(1);
+		}
+		75% {
+			filter: grayscale(0);
+		}
+		100% {
+			filter: grayscale(1);
+		}
+	}
+	@keyframes bgmove {
+		0% {
+			opacity: 0.99;
+		}
+		75% {
+			opacity: 0.001;
+		}
+		100% {
+			opacity: 0.99;
+		}
+	}
+
 	@keyframes text-color-shift {
 		0% {
 			color: var(--color-8-2);
@@ -81,46 +196,6 @@
 			color: var(--color-0-1);
 		}
 	}
-	:global(body) {
-		--color-0-1: #222647;
-		--color-0-2: #7d119c;
-
-		--color-1-1: #3498ff;
-		--color-1-2: #c092ff;
-		--color-2-1: #56bfff;
-		--color-2-2: #96bcff;
-		--color-3-1: #76e1ff;
-		--color-3-2: #73e0ff;
-		--color-4-1: #357aab;
-		--color-4-2: #7b77b1;
-		--color-5-1: #1050ab;
-		--color-5-2: #be4ab1;
-		--color-6-1: #7d119c;
-		--color-6-2: #c81c64;
-		--color-7-1: #0e1d24;
-		--color-7-2: #181d38;
-		--color-8-1: #182635;
-		--color-8-2: #222647;
-	}
-	.test-bg {
-		opacity: 0.001;
-		background-size: cover;
-		background-position: center;
-		background-repeat: no-repeat;
-
-		animation-name: bgfade;
-		animation-duration: 20s;
-		animation-timing-function: ease;
-		animation-iteration-count: infinite;
-		animation-direction: normal;
-		animation-fill-mode: none;
-		animation-play-state: running;
-		position: fixed;
-		top: 0;
-		right: 0;
-		bottom: 0;
-		left: 0;
-	}
 
 	@keyframes bgfade2 {
 		0% {
@@ -129,7 +204,7 @@
 		10% {
 			opacity: 0.99;
 		}
-		30% {
+		20% {
 			opacity: 0.001;
 		}
 		90% {
@@ -154,64 +229,6 @@
 		}
 		100% {
 			opacity: 0.001;
-		}
-	}
-	.bg {
-		background-size: cover;
-		background-position: center;
-		background-repeat: no-repeat;
-
-		position: absolute;
-		top: 0;
-		right: 0;
-		bottom: 0;
-		left: 0;
-	}
-	.bg-overlay {
-		background-image: url('/royko/royko-branding-transparent-reverse-wide.png');
-		z-index: 11;
-	}
-	.bg-image {
-		opacity: 0.7;
-		background-image: url('/royko/city-with-color.png');
-		z-index: 10;
-	}
-	.bg-image::before {
-		content: '';
-		position: absolute;
-		top: 0;
-		right: 0;
-		bottom: 0;
-		left: 0;
-		backdrop-filter: grayscale(1);
-		animation-name: bgmove;
-		animation-duration: 20s;
-		animation-timing-function: ease;
-		animation-iteration-count: infinite;
-		animation-direction: normal;
-		animation-fill-mode: none;
-		animation-play-state: running;
-	}
-	@keyframes desat {
-		0% {
-			filter: grayscale(1);
-		}
-		75% {
-			filter: grayscale(0);
-		}
-		100% {
-			filter: grayscale(1);
-		}
-	}
-	@keyframes bgmove {
-		0% {
-			opacity: 0.99;
-		}
-		75% {
-			opacity: 0.001;
-		}
-		100% {
-			opacity: 0.99;
 		}
 	}
 </style>
