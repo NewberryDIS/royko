@@ -12,7 +12,7 @@
 	<!--   <div class="color-{i} layer" style="z-index: {grads.length - idx}; opacity: 0.01; background-image: linear-gradient(to bottom, var(--color-{i}-1) , var(--color-{i}-2) ); animation-delay:  {(idx * 4) - 2}s; animation-duration: {grads.length * 4}s;"></div> -->
 	<!-- {/each} -->
 
-	<div class:locationNOK class="tile-text">
+	<div class="tile-text">
 		<h2 style="--duration: {duration}s; --delay: -{delay * idx}s;">{title}</h2>
 	</div>
 </div>

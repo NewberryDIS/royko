@@ -1,212 +1,187 @@
 <script lang="ts">
-	import { onMount } from 'svelte';
-	import { base } from '$app/paths';
-	import { page } from '$app/stores';
-	import { pushState } from '$app/navigation';
-	import { createFlip } from '$lib/flip';
-	import Bg from '$lib/bg.svelte';
-	import Tile from '$lib/tile.svelte';
-	import { article, content, layouts, slugs } from '$lib';
+import { onMount } from 'svelte';
+import { base } from '$app/paths';
+import { page } from '$app/stores';
+import { pushState } from '$app/navigation';
+import Bg from '$lib/bg.svelte';
+import { content } from '$lib';
+console.log($page.params.id)
+let activeSlug = $state($page.params.id) 
+$inspect( activeSlug)
+// if ($page.params.id !== ""){
+//   activeSlug = $page.params.id
+// }
+ function nav(slug){
+  if (slug !== activeSlug) {
+    pushState(`/royko/${slug}`);
+    activeSlug = slug
+  } else {
+    pushState(`/royko`);
+    activeSlug = undefined
+  }
+} 
 
 	const locationNOK = false;
 	const pixPath = locationNOK ? 'blurry-pix' : 'transp-text';
-	$article = $page.params.id || '';
-	// let layout = content.includes(id) ? layouts[content.indexOf(id)] : layouts[content.length];
-	// $: layout = content.includes(id) ? layouts[content.indexOf(id)] : layouts[content.length];
-	let layout = $slugs.includes($article)
-		? $layouts[$slugs.indexOf($article)]
-		: $layouts[$layouts.length - 1];
-	// $: console.log('layout', layout);
-	// $: console.log(' article ', $article);
-	let hideContent = true,
-		ready = true;
 
-	export async function handleClick(n: String, i: Number) {
-		// console.log(n, i);
-		if (ready && n !== $page.state.showArticle) {
-			ready = false;
-			layout = $layouts[i];
-			const flipInstance = createFlip('.box', { duration: 1000 });
-			ready = await flipInstance.flip();
-			pushState(`/royko/${n}`, {
-				showArticle: n
-			});
-		} else {
-			ready = false;
-			layout = $layouts[$layouts.length - 1];
-			const flipInstance = createFlip('.box', { duration: 1000 });
-			ready = await flipInstance.flip();
-			pushState(`/royko/`, {
-				showArticle: 'none'
-			});
-		}
-	}
-	// $: timesUp && handleClick($page.state.showArticle, $layouts.length);
+	let duration = 16;
+	let delay = Math.round(duration / 8);
 </script>
 
-<Bg {locationNOK} />
-<div class="grid" style="grid-template-areas: {layout};">
-	{#each Object.entries($content) as [k, v], i}
-		<article
-			on:click={ready ? () => handleClick(k, i) : ''}
-			class="box article-{i}"
-			class:active={($page.state.showArticle || $article) === k && ready}
-			style="cursor: {ready ? 'pointer' : ''}; grid-area: {k}; "
-		>
-			<div class="child">
-				<!-- {#if ready} -->
-				<div class="text-images">
-					{#if locationNOK}
-						<p class="locnok">
-							Due to licensing issues, the text can only <br />be viewed on site. Come visit!
-						</p>
-					{/if}
-					{#each v.pages as page}
+<Bg />
+<div class="wrapper">
+  <div class="menu">
+    {#each Object.entries(content) as [slug, v], idx}
+      <div class="menu-tile-wrapper"  style="--duration: {duration}s; --delay: -{delay * idx}s;">
+      <button class="menu-tile" on:click={()=>nav(slug)}>
+        {v.title}
+      </button>
+      </div>
+    {/each}
+  </div>
+  <div class="content">
+    {#if activeSlug}
+      <div class="gallery">
+        {#each content[activeSlug].pages as p}
 						<img
-							src="{base}/{pixPath}/991625758805867_ord_f_548.52_r684_1999_{page}.webp"
+							src="{base}/{pixPath}/991625758805867_ord_f_548.52_r684_1999_{p}.webp"
 							alt="page of text written by Mike Royko"
 						/>
-					{/each}
-				</div>
-				{#if ($page.state.showArticle || $article) !== k}<Tile title={v.title} idx={i} />{/if}
-				<!-- {/if} -->
-			</div>
-		</article>
-	{/each}
+{/each}
+      </div>
+{/if}
+  </div>
 </div>
 
 <style>
-	.locnok {
-		position: sticky;
-		top: 0;
-		font-size: 3vh;
+.wrapper {
+  top: 0;
+  lefT: 0;
+  width: 100dvw;
+  height: 100dvh;
+  display:flex;
+  position: relative;
+  z-index: 1000;
+}
+.menu {
+  /* height: 100%; */
+  padding: 1rem;
+  /* flex:1; */
+  flex-basis: 250px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-evenly;
+  align-items: center;
+  gap: 1rem;
+}
+.content {
+  flex: 4;
+  display: flex;
+  flex-direction: column;
+  justify-content: start;
+  align-items: center;
+  gap: 11px;
+}
+.menu-tile-wrapper {
+  flex: 1;
+    cursor: pointer;
+    box-sizing: border-box;
+  border: 1px solid var(--the-red);
+  border-radius: 3px;
+  background: #fff;
+  /* border: 5px solid oklch(47.5%, 45.5%, 24.667%); */
+  /* border-width: 10px; */
+  /* border-style: solid; */
 
-		text-align: center;
-		background: rgba(255, 255, 255, 0.87);
-		padding: 11px 33px;
-		z-index: 10001;
-		border: 1px solid rgba(0, 0, 0, 0.5);
-		/* animation: 30s text-color-shift infinite; */
-	}
+  width: 100%;
+  transition: 200ms;
+  &:hover  {
+    background: color-mix( in oklab, var(--the-red) 5%, #fff) ;
+    & button {
+      background-clip: border-box;
+      color: #fff;
+    }
+  }
+}
 
-	:global(body) {
-		overflow: hidden;
-		--color-1: #3498ff;
-		--color-2: #56bfff;
-		--color-3: #76e1ff;
-		--color-4: #357aab;
-		--color-5: #1050ab;
-		--color-6: #7d119c;
-		--color-7: #0e1d24;
-		--color-8: #182635;
-    --color-9: #ad3533;
-	}
-	.box:not(.active) .text-images,
-	.box.active .title {
-		width: 1px;
-		height: 1px;
-		overflow: hidden;
-		opacity: 0.001;
-		& img {
-			max-width: 1px;
-			max-height: 1px;
+.menu-tile {
+  border: 0;
+  font-family: 'Anton', sans-serif;
+  font-size: 24px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    height: 100%;
+    width: 100%;
+    background-image: linear-gradient(45deg,var(--color-4),var(--color-8),var(--color-4));
+    position: relative;
+    background-size: 200vh 100%;
+    background-clip: text;
+    color: transparent;
+    padding: 0;
+    margin: 0;
+    animation: bgmove var(--duration) var(--delay) ease infinite;
+  /* position: relative; */
+}
+.content {
+  margin-block: 76px;
+}
+.gallery {
+  overflow: scroll;
+  padding: 33px;
+  background: #fff;
+  border: 1px solid var(--the-red);
+  border-radius: 3px;
+  width: min(600px, 90vw);
+  display: flex;
+  flex-direction: column;
+  justify-content: start;
+  align-items: center;
+  gap: 1rem;
+  & img {
+    width: 100%;
+    height: auto;
+    object-fit: contain;
+  }
+}
+:global(body){
+    --the-red: oklab(47.5% 41.25% 19%);
+  --lab: lab(37.215%, 46.136%, 29.357%);
+  --okch: oklch(47.5%, 45.5%, 24.667%);
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+  --color-1: #3498ff;
+  --color-2: #56bfff;
+  --color-3: #76e1ff;
+  --color-4: #357aab;
+  --color-5: #1050ab;
+  --color-6: #7d119c;
+  --color-7: #0e1d24;
+  --color-8: #182635;
+  --color-9: #ad3533;
+  font-family: 'Anton', sans-serif;
+  font-weight: 400;
+  font-style: normal;
+  --gap: 3px;
+  --mini: calc(var(--maxi) / 3);
+  --mini-height: calc(var(--mini) - ((var(--gap) / 3) * 2));
+  --maxi: min(90vh, 90vw);
+  --maxi-height: calc(var(--maxi) + var(--gap) + var(--gap));
+}
+
+:global(*) {
+  box-sizing: border-box;
+}
+
+	@keyframes bgmove {
+		0% {
+			background-position: 0 0;
 		}
-	}
-
-	.active .text-images {
-		display: flex;
-		flex-direction: column;
-		justify-content: center;
-		align-items: center;
-		width: 100%;
-		opacity: 0.99;
-		gap: 11px;
-		& img {
-			max-width: 90%;
-			max-height: 100%;
-			object-fit: contain;
+		100% {
+			background-position: 100% 100%;
 		}
-	}
-	:global(body) {
-		font-family: 'Anton', sans-serif;
-		font-weight: 400;
-		font-style: normal;
-		--gap: 3px;
-		--mini: calc(var(--maxi) / 3);
-		--mini-height: calc(var(--mini) - ((var(--gap) / 3) * 2));
-		--maxi: min(90vh, 90vw);
-		--maxi-height: calc(var(--maxi) + var(--gap) + var(--gap));
-	}
-
-	:global(*) {
-		box-sizing: border-box;
-	}
-
-	.grid {
-		height: 96dvh;
-		width: 100%;
-		/* position: fixed; */
-		/* top: 2dvh; */
-		/* right: 0; */
-		/* bottom: 2dvh; */
-		/* left: 0; */
-		margin: var(--gap) auto;
-		display: grid;
-		/* place-content: center; */
-		grid-template-columns: repeat(1, 200px 1fr);
-		grid-template-rows: repeat(8, 1fr);
-		gap: var(--gap);
-		z-index: 1000;
-	}
-	article,
-	.child {
-		transition: all 0.5s;
-	}
-	.flexi {
-		display: flex;
-		flex-direction: column;
-		justify-content: stretch;
-		align-items: stretch;
-		/* background: #333; */
-	}
-	article.active {
-		max-height: 95dvh;
-		& .child {
-			overflow: scroll;
-		}
-	}
-	article:not(.active) {
-		& .child {
-			overflow: hidden;
-			/* box-shadow: 0 8px 32px 0 rgba( 31, 38, 135, 0.37 ); */
-			backdrop-filter: blur(6px);
-			/* border-radius: 10px; */
-			border: 1px solid rgba(255, 255, 255, 0.18);
-			border: 1px solid rgba(0, 0, 0, 0.87);
-			display: flex;
-			flex-direction: column;
-			justify-content: center;
-			align-items: cover;
-		}
-	}
-	article {
-		padding: var(--gap);
-		display: flex;
-		justify-content: center;
-		align-items: center;
-		position: relative;
-		z-index: 1000;
-	}
-	.child {
-		position: relative;
-		padding: 3%;
-		width: min(100%, 50vw);
-		height: min(100%, 77vh);
-		max-height: min(100%, 77vh);
-		background: rgba(255, 255, 255, 0.87);
-		/* box-shadow: 0 8px 32px 0 rgba( 31, 38, 135, 0.37 ); */
-		backdrop-filter: blur(6px);
-		border-radius: 6px;
-		border: 1px solid rgba(255, 255, 255, 1);
 	}
 </style>
